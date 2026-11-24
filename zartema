@@ -1,24 +1,30 @@
 #!/usr/bin/env bash
 
-case "$1" in
+shellcheck source=scripts/lib/common.sh
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/scripts/lib/common.sh"
+
+require_tools
+require_git
+
+case "${1:-}" in
     "rb" | "rbp" | "rebuild")
         scripts/rebuildPatches.sh
-    ;;
+        ;;
     "p" | "patch")
-        scripts/build.sh
-    ;;
+        scripts/applyPatches.sh
+        ;;
     "m" | "up" | "merge")
         scripts/mergeUpstream.sh
-    ;;
+        ;;
     "b" | "build")
-        scripts/build.sh --jar
-    ;;
+        scripts/build.sh "${2:-}"
+        ;;
     "e" | "edit")
         scripts/edit.sh
-    ;;
+        ;;
     "i" | "init")
         scripts/init.sh
-    ;;
+        ;;
     *)
         echo "Zartema build tool command. This provides a variety of commands to control the Zartema (waterfall tool)"
         echo "build. View below for details of the available commands."
